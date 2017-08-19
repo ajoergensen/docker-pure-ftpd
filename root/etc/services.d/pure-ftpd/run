@@ -1,0 +1,24 @@
+#!/usr/bin/with-contenv bash
+
+# build up flags passed to this file on run + env flag for additional flags
+# e.g. -e "ADDED_FLAGS=--tls=2"
+PURE_FTPD_FLAGS="$ADDED_FLAGS -c 50 -C 10 -l puredb:/etc/pure-ftpd/pureftpd.pdb -E -j -R -P $PUBLICHOST -p 30000:30009"
+
+# detect if using TLS (from volumed in file) but no flag set, set one
+if [ -e /etc/ssl/private/pure-ftpd.pem ] && [[ "$PURE_FTPD_FLAGS" != *"--tls"* ]]
+ then
+    echo "TLS Enabled"
+    PURE_FTPD_FLAGS="$PURE_FTPD_FLAGS --tls=1 "
+fi
+
+if [[ "$PURE_FTPD_FLAGS" == *"--tls"* ]]
+ then
+	PURE_FTPD_FLAGS="$PURE_FTPD_FLAGS --tlsciphersuite=AES128+EECDH:AES128+EDH"
+fi
+
+# let users know what flags we've ended with (useful for debug)
+echo "Starting Pure-FTPd:"
+echo "  pure-ftpd $PURE_FTPD_FLAGS"
+
+# start pureftpd with requested flags
+exec /usr/sbin/pure-ftpd $PURE_FTPD_FLAGS
