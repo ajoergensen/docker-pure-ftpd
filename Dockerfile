@@ -4,8 +4,8 @@ MAINTAINER ajoergensen
 
 RUN \
 	apk -U update && \
-	apk add pure-ftpd rsyslog && \
-	rm /var/cache/apk/* /etc/rsyslog.conf
+	apk add pure-ftpd && \
+	rm /var/cache/apk/* 
 
 ADD root/ /
 
