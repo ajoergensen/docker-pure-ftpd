@@ -3,14 +3,35 @@ pure-ftpd container
 
 pure-ftpd with virtual users. Based on [stilliard/docker-pure-ftpd](https://github.com/stilliard/docker-pure-ftpd)
 
+Main differences:
+
+- Based on Alpine Linux, not Debian
+- s6 init
+- pure-ftpd is installed from Alpine's repository, not compiled from source
+
 ### Usage
 
-`docker run -d --name ftpd_server -p 21:21 -p 30000-30009:30000-30009 -e "PUBLICHOST=localhost" ajoergensen/pure-ftpd`
+#### Plain FTP
+
+```docker run -d --name ftpd_server -p 20-21:20-21 -p 30000-30009:30000-30009 -e "PUBLICHOST=localhost" ajoergensen/pure-ftpd```
+
+#### FTP with TLS
+
+```docker run -d --name ftpd_server -p 20-21:20-21 -p 30000-30009:30000-30009 -e "PUBLICHOST=localhost" -v ./certs:/etc/ssl/private:ro ajoergensen/pure-ftpd```
+
+The directory/volume used for `/etc/ssl/private/` must contain the file `pure-ftpd.pem`.
+
+`pure-ftpd.pem` must contain the private key, certificate and all intermediate certificates needed.
+
+```bash
+cat private-key.pem certificate.pem intermediate.pem > pure-ftpd.pem
+```
 
 ### Environment
 
- - **ADDED_FLAGS**: Any command line options to be added to the default
- - **PUBLIC_HOST**: Host/IP used for PASV
+ - `ADDED_FLAGS`: Any command line options to be added to the default
+ - `PUBLICHOST`: Host/IP used for PASV
+ - `CIPHER_LIST`: List of SSL ciphers to use/support if TLS is enabled, default is EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH 
 
 ### Management
 

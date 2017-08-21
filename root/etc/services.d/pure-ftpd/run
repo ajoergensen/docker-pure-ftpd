@@ -1,4 +1,5 @@
 #!/usr/bin/with-contenv bash
+: ${CIPHER_LIST:="EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH"}
 
 # build up flags passed to this file on run + env flag for additional flags
 # e.g. -e "ADDED_FLAGS=--tls=2"
@@ -13,7 +14,7 @@ fi
 
 if [[ "$PURE_FTPD_FLAGS" == *"--tls"* ]]
  then
-	PURE_FTPD_FLAGS="$PURE_FTPD_FLAGS --tlsciphersuite=AES128+EECDH:AES128+EDH"
+	PURE_FTPD_FLAGS="$PURE_FTPD_FLAGS --tlsciphersuite=$CIPHER_LIST"
 fi
 
 # let users know what flags we've ended with (useful for debug)
