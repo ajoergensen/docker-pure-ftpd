@@ -7,7 +7,6 @@ Main differences:
 
 - Based on Alpine Linux, not Debian
 - s6 init
-- pure-ftpd is installed from Alpine's repository, not compiled from source
 
 ### Usage
 
