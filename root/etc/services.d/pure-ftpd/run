@@ -14,7 +14,7 @@ fi
 
 if [[ "$PURE_FTPD_FLAGS" == *"--tls"* ]]
  then
-	PURE_FTPD_FLAGS="$PURE_FTPD_FLAGS --tlsciphersuite=$CIPHER_LIST"
+	PURE_FTPD_FLAGS="$PURE_FTPD_FLAGS -J $CIPHER_LIST"
 fi
 
 # let users know what flags we've ended with (useful for debug)
