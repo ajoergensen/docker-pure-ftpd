@@ -6,7 +6,7 @@ ARG PUREFTPD_VERSION=1.0.46
 
 RUN \
 	apk -U update && \
-	apk add --virtual .builddep libressl-dev build-base && \
+	apk add --virtual .builddeps libressl-dev build-base && \
 	cd /tmp && \
 	wget -q http://download.pureftpd.org/pub/pure-ftpd/releases/pure-ftpd-$PUREFTPD_VERSION.tar.gz	&& \
 	tar zxf pure-ftpd-$PUREFTPD_VERSION.tar.gz && \
@@ -17,6 +17,7 @@ RUN \
 	deps=$(scanelf --needed --nobanner /usr/sbin/pure-ftpd | awk '{ gsub(/,/, "\nso:", $2); print "so:" $2 }' \
                         | sort -u | xargs -r apk info --installed | sort -u ) && \
 	apk add --virtual .rundeps $deps && \
+	apk del .builddeps && \
 	rm -rf /var/cache/apk/* /tmp/*
 
 ADD root/ /
