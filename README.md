@@ -17,6 +17,9 @@ Main differences:
 #### FTP with TLS
 
 ```docker run -d --name ftpd_server -p 20-21:20-21 -p 30000-30009:30000-30009 -e "PUBLICHOST=localhost" -v ./certs:/etc/ssl/private:ro ajoergensen/pure-ftpd```
+In the default configuration only TLSv1.2 and strong ciphers are used.
+
+##### Certificate
 
 The directory/volume used for `/etc/ssl/private/` must contain the file `pure-ftpd.pem`.
 
@@ -26,11 +29,21 @@ The directory/volume used for `/etc/ssl/private/` must contain the file `pure-ft
 cat private-key.pem certificate.pem intermediate.pem > pure-ftpd.pem
 ```
 
+##### dhparams
+
+If you place a file called `pure-ftpd-dhparams.pem` in `/etc/ssl/private` it will be used by pure-ftpd
+
+The dhparams should be at least 2048 bits:
+
+```bash
+# openssl dhparam -out pure-ftpd-dhparams.pem 4096
+```
+
 ### Environment
 
  - `ADDED_FLAGS`: Any command line options to be added to the default
  - `PUBLICHOST`: Host/IP used for PASV
- - `CIPHER_LIST`: List of SSL ciphers to use/support if TLS is enabled, default is EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH 
+ - `CIPHER_LIST`: List of SSL ciphers to use/support if TLS is enabled, default is ```ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA256``` ([Mozilla modern cipher list](https://mozilla.github.io/server-side-tls/ssl-config-generator/)
 
 ### Management
 
