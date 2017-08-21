@@ -43,7 +43,7 @@ The dhparams should be at least 2048 bits:
 
  - `ADDED_FLAGS`: Any command line options to be added to the default
  - `PUBLICHOST`: Host/IP used for PASV
- - `CIPHER_LIST`: List of SSL ciphers to use/support if TLS is enabled, default is ```ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA256``` ([Mozilla modern cipher list](https://mozilla.github.io/server-side-tls/ssl-config-generator/)
+ - `CIPHER_LIST`: List of SSL ciphers to use/support if TLS is enabled, default is ```ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA256``` ([Mozilla modern cipher list](https://mozilla.github.io/server-side-tls/ssl-config-generator/))
 
 ### Management
 
