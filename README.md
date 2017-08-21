@@ -17,7 +17,8 @@ Main differences:
 #### FTP with TLS
 
 ```docker run -d --name ftpd_server -p 20-21:20-21 -p 30000-30009:30000-30009 -e "PUBLICHOST=localhost" -v ./certs:/etc/ssl/private:ro ajoergensen/pure-ftpd```
-In the default configuration only TLSv1.2 and strong ciphers are used.
+
+In the default configuration only TLSv1.2 and strong ciphers are used [testssl.sh report](https://ajoergensen.github.io/docker-pure-ftpd/testssl.sh.html)
 
 ##### Certificate
 
