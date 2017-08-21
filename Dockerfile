@@ -11,7 +11,7 @@ RUN \
 	wget -q http://download.pureftpd.org/pub/pure-ftpd/releases/pure-ftpd-$PUREFTPD_VERSION.tar.gz	&& \
 	tar zxf pure-ftpd-$PUREFTPD_VERSION.tar.gz && \
 	cd pure-ftpd-$PUREFTPD_VERSION && \
-	./configure --prefix=/usr --without-humor --without-unicode --with-throttling --with-puredb --with-tls && \
+	./configure --prefix=/usr --without-humor --without-unicode --with-throttling --with-puredb --with-tls --with-altlog && \
 	make -j$(getconf _NPROCESSORS_ONLN) && make install && \
 	cd / && \
 	deps=$(scanelf --needed --nobanner /usr/sbin/pure-ftpd | awk '{ gsub(/,/, "\nso:", $2); print "so:" $2 }' \
