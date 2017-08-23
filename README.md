@@ -1,6 +1,8 @@
 pure-ftpd container
 ===================
 
+[![](https://images.microbadger.com/badges/image/ajoergensen/pure-ftpd.svg)](https://microbadger.com/images/ajoergensen/pure-ftpd "Get your own image badge on microbadger.com") [![Build Status](https://travis-ci.org/ajoergensen/docker-pure-ftpd.svg?branch=master)](https://travis-ci.org/ajoergensen/docker-pure-ftpd)
+
 pure-ftpd with virtual users. Based on [stilliard/docker-pure-ftpd](https://github.com/stilliard/docker-pure-ftpd)
 
 Main differences:
