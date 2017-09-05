@@ -24,15 +24,17 @@ In the default configuration only TLSv1.2 and strong ciphers are used ([testssl.
 
 ##### Certificate
 
-The directory/volume used for `/etc/ssl/private/` must contain the file `pure-ftpd.pem`.
+##### Manual certificate handling
+
+If you use a traditional CA which issues certificates manually and with a long expiry time (1-3 years) you can simply provide the needed files via the volume used for `/etc/ssl/private/` 
+
+The directory must contain the file `pure-ftpd.pem`.
 
 `pure-ftpd.pem` must contain the private key, certificate and all intermediate certificates needed.
 
 ```bash
 cat private-key.pem certificate.pem intermediate.pem > pure-ftpd.pem
 ```
-
-##### dhparams
 
 If you place a file called `pure-ftpd-dhparams.pem` in `/etc/ssl/private` it will be used by pure-ftpd
 
@@ -42,10 +44,22 @@ The dhparams should be at least 2048 bits:
 # openssl dhparam -out pure-ftpd-dhparams.pem 4096
 ```
 
+##### Automatic certificate handling
+
+If you use Let's Encrypt and rely on automatic certificate renewal it is possible to have the container monitor the certificate for changes and restart pure-ftpd is a change is detected
+
+```docker run -name -p 20-21:20-21 -p 30000-30009:30000-30009 -e "PUBLICHOST=localhost" -v /etc/letsencrypt/ftp.example.com/key.pem:/certs/ftpd.key:ro -v /etc/letsencrypt/ftp.example.com/fullchain.pem:/certs/ftpd.pem:ro -v -v /etc/letsencrypt/dhparams.pem:/certs/dhparams.pem ajoergensen/pure-ftpd```
+
+The location and name of the files inside the can be controlled through environment variables. See below.
+
 ### Environment
 
  - `ADDED_FLAGS`: Any command line options to be added to the default
  - `PUBLICHOST`: Host/IP used for PASV
+ - `MONITOR_CERTIFICATE`: Monitors the supplied key/certificate for changes. This is useful if using Let's Encrypt certificates. Default is `FALSE`
+ - `CERTIFICATE_KEY_PATH`: Path *inside the container* to the key file for the SSL certificate. Only used if `MONITOR_CERTIFICATE` is true. Default is `/certs/ftpd.key`
+ - `CERTIFICATE_FULLCHAIN_PATH`: Path *inside the container* to the SSL certificate file (including all needed intermediates). Only used if `MONITOR_CERTIFICATE` is true. Default is `/certs/ftpd.pem`
+ - `CERTIFICATE_DHPARAMS_PATH`: Path *inside the container* to the dhparams.pem file. Only used if `MONITOR_CERTIFICATE` is true. Default is `/certs/dhparams.pem`
  - `CIPHER_LIST`: List of SSL ciphers to use/support if TLS is enabled, default is ```ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA256``` ([Mozilla modern cipher list](https://mozilla.github.io/server-side-tls/ssl-config-generator/))
 
 ### Management
