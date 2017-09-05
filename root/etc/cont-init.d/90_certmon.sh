@@ -1,14 +1,27 @@
 #!/usr/bin/with-contenv bash
 set -eo pipefail
 
+shopt -s nocasematch
+if [[ $DEBUG == "TRUE" ]]
+ then
+	set -x
+fi
+
 : ${MONITOR_CERTIFICATE:="FALSE"}
 : ${CERTIFICATE_KEY_PATH:="/certs/ftpd.key"}
 : ${CERTIFICATE_FULLCHAIN_PATH:="/certs/ftpd.pem"}
 : ${CERTIFICATE_DHPARAMS_PATH:="/certs/dhparams.pem"}
 
-shopt -s nocasematch
+CERTIFICATE_DIR="/etc/ssl/private"
+
 if [[ $MONITOR_CERTIFICATE == "TRUE" ]]
  then
+
+	if [[ ! -d $CERTIFICATE_DIR ]]
+	 then
+		mkdir $CERTIFICATE_DIR
+	fi
+
         if [[ ! -f $CERTIFICATE_KEY_PATH ]]
          then
                 echo "Error: $CERTIFICATE_KEY_PATH not found"
@@ -21,17 +34,17 @@ if [[ $MONITOR_CERTIFICATE == "TRUE" ]]
                 exit 1
         fi
 
-        if [[ ! -f /etc/ssl/private/pure-ftpd.pem ]]
+        if [[ ! -f $CERTIFICATE_DIR/pure-ftpd.pem ]]
          then
-                cat  $CERTIFICATE_KEY_PATH $CERTIFICATE_FULLCHAIN_PATH > /etc/ssl/private/pure-ftpd.pem
+                cat  $CERTIFICATE_KEY_PATH $CERTIFICATE_FULLCHAIN_PATH > $CERTIFICATE_DIR/pure-ftpd.pem
         fi
 
-	if [[ ! -f /etc/ssl/private/pure-ftpd-dhparams.pem && ! -f $CERTIFICATE_DHPARAMS_PATH ]]
+	if [[ ! -f $CERTIFICATE_DIR/pure-ftpd-dhparams.pem && ! -f $CERTIFICATE_DHPARAMS_PATH ]]
 	 then
 		echo "dhparams.pem not found - Remember to mount it from the host"
-       	elif [[ -f $CERTIFICATE_DHPARAMS_PATH  && ! -f /etc/ssl/private/pure-ftpd-dhparams.pem ]]
+       	elif [[ -f $CERTIFICATE_DHPARAMS_PATH  && ! -f $CERTIFICATE_DIR/pure-ftpd-dhparams.pem ]]
 	 then
-		cp $CERTIFICATE_DHPARAMS_PATH /etc/ssl/private/pure-ftpd-dhparams.pem
+		cp $CERTIFICATE_DHPARAMS_PATH $CERTIFICATE_DIR/pure-ftpd-dhparams.pem
 		
 	fi
 
