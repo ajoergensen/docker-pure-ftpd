@@ -36,7 +36,9 @@ if [[ $MONITOR_CERTIFICATE == "TRUE" ]]
 
         if [[ ! -f $CERTIFICATE_DIR/pure-ftpd.pem ]]
          then
-                cat  $CERTIFICATE_KEY_PATH $CERTIFICATE_FULLCHAIN_PATH > $CERTIFICATE_DIR/pure-ftpd.pem
+                cat  $CERTIFICATE_KEY_PATH > $CERTIFICATE_DIR/pure-ftpd.pem
+		echo >> $CERTIFICATE_DIR/pure-ftpd.pem
+		cat $CERTIFICATE_FULLCHAIN_PATH >> $CERTIFICATE_DIR/pure-ftpd.pem
         fi
 
 	if [[ ! -f $CERTIFICATE_DIR/pure-ftpd-dhparams.pem && ! -f $CERTIFICATE_DHPARAMS_PATH ]]
