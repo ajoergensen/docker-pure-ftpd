@@ -1,0 +1,22 @@
+#!/usr/bin/with-contenv bash
+set -eo pipefail
+
+TARGET_CERTIFICATE="/etc/ssl/private/pure-ftpd.pem"
+TMP_CERTIFICATE=`mktemp`
+
+while true
+ do
+	cat {{ .Env.CERTIFICATE_KEY_PATH }} > $TMP_CERTIFICATE
+	echo >> $TMP_CERTIFICATE
+	cat {{ .Env.CERTIFICATE_FULLCHAIN_PATH }} >> $TMP_CERTIFICATE
+
+	cmp -s $TMP_CERTIFICATE $TARGET_CERTIFICATE
+	if [[ $? -eq 1 ]]
+	 then
+		echo "New certificate detected, installing and reloading pure-ftpd"
+		cp $TMP_CERTIFICATE $TARGET_CERTIFICATE
+		s6-svc -t /etc/services.d/pure-ftpd
+	fi
+
+	sleep 3600
+done
