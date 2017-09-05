@@ -1,5 +1,5 @@
 #!/usr/bin/with-contenv bash
-set -exo pipefail
+set -eo pipefail
 
 : ${MONITOR_CERTIFICATE:="FALSE"}
 : ${CERTIFICATE_KEY_PATH:="/certs/ftpd.key"}
@@ -29,7 +29,8 @@ if [[ $MONITOR_CERTIFICATE == "TRUE" ]]
 	if [[ ! -f /etc/ssl/private/pure-ftpd-dhparams.pem && ! -f $CERTIFICATE_DHPARAMS_PATH ]]
 	 then
 		echo "dhparams.pem not found - Remember to mount it from the host"
-       	 elif [[ -f $CERTIFICATE_DHPARAMS_PATH  && ! -f /etc/ssl/private/pure-ftpd-dhparams.pem ]]
+       	elif [[ -f $CERTIFICATE_DHPARAMS_PATH  && ! -f /etc/ssl/private/pure-ftpd-dhparams.pem ]]
+	 then
 		cp $CERTIFICATE_DHPARAMS_PATH /etc/ssl/private/pure-ftpd-dhparams.pem
 		
 	fi
